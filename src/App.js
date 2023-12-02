@@ -1,24 +1,25 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
+import NoteBook from './Notebook';
+import Settings from './pages/Settings';
 
 function App() {
+  useEffect(() => {
+    fetch('http://localhost:3000/reflectionQuestions')
+    .then((response) => response.json())
+    .then((data) => setReflectionQuestions(data));
+  }, []);
+
+  const [reflectionQuestions, setReflectionQuestions] = useState([]);
+
+  function addReflectionQuestion(newReflection) {
+    setReflectionQuestions([...reflectionQuestions, newReflection]);
+    console.log(`Reflection question #${newReflection.id} successfully added to the server!`);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    //<NoteBook />
+    <Settings reflectionQuestions={reflectionQuestions} onAddReflection={addReflectionQuestion} />
   );
 }
 
